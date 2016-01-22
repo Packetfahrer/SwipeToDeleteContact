@@ -1,0 +1,10 @@
+Package: com.packetfahrer.deletecontacts
+Name: DeleteContacts
+Depends: mobilesubstrate, firmware (>= 7.0)
+Architecture: iphoneos-arm
+Description: Delete Contacts with a Swipe!
+Author: Rene Kahle <packetfahrer@web.de>
+Section: Tweaks
+homepage: http://www.facebook.com/dk78dk
+Version: 1.1.1
+Installed-Size: 224

@@ -1,0 +1,10 @@
+{
+    entry =     {
+        bundle = DeleteContactsPrefs;
+        cell = PSLinkCell;
+        detail = DeleteContactsPrefsListController;
+        icon = "DeleteContactsPrefs.png";
+        isController = 1;
+        label = "Delete Contacts";
+    };
+}

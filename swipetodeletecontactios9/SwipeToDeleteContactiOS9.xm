@@ -1,10 +1,24 @@
+//
+//  SwipeToDeleteContactiOS9.x
+//  SwipeToDeleteContactiOS9
+//
+//  Created by Rene Kahle on 22.01.2016.
+//  Copyright (c) 2016 Rene Kahle. All rights reserved.
+//
 
+
+
+
+#import "../HEADERS.h"
+#import "../DebugLog.h"
 #import <UIKit/UIKit.h>
-#import "Headers.h"
+
+
+
 #define IS_OS_9_OR_LATER [[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0
 #define APPID @"com.packetfahrer.swipetodeletecontact"
 #define DEFAULT_ENABLED YES
-#define PREFS_ENABLED_KEY @"useAlarm"
+#define PREFS_ENABLED_KEY @"swEnabled"
 
 #define Enabled ([preferences objectForKey: PREFS_ENABLED_KEY] ? [[preferences objectForKey: PREFS_ENABLED_KEY] boolValue] : DEFAULT_ENABLED)
 
@@ -58,6 +72,7 @@ void loadPreferences() {
 		NSArray *keyList = [(NSArray *)CFPreferencesCopyKeyList((CFStringRef)APPID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost) autorelease];
 		preferences = (NSDictionary *)CFPreferencesCopyMultiple((CFArrayRef)keyList, (CFStringRef)APPID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 
+		NSLog (@"loadPreferences %@", preferences);
 	}
 
 
@@ -71,6 +86,8 @@ void loadPreferences() {
 -(id)initWithDataSource:(id)arg1
 {
 	
+	//loadPreferences();
+
 	dataSource = arg1;
 	
 
@@ -81,7 +98,12 @@ void loadPreferences() {
 
 - (BOOL)tableView:(id)arg1 canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+
 	if (Enabled) {
+
+	
+		NSLog (@"Enabled %i", Enabled);
+
 
 	if ([[[self tableView] _rowData] globalRowForRowAtIndexPath:indexPath] == 0  && [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.mobilephone"]) {
 
@@ -93,9 +115,12 @@ void loadPreferences() {
 
 	return YES;
 
-	}
+	} else {
 
-	return %orig;
+	return NO;
+
+	
+	}
 
 }
 

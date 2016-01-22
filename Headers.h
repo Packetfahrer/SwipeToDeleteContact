@@ -1,5 +1,11 @@
 #import <UIKit/UITableViewCell.h>
 
+#import <UIKit/UITableViewCell.h>
+#import <AddressBook/AddressBook.h>
+#import <AddressBookUI/AddressBookUI.h>
+
+#import "DebugLog.h"
+
 
 @class NSString, NSDateComponents, NSDate, NSData, NSArray, CNActivityAlert, NSDictionary, NSSet, SGRecordId;
 
@@ -19,8 +25,6 @@
 
 
 @end
-
-
 
 
 
@@ -88,5 +92,42 @@
 -(BOOL)executeSaveRequest:(id)arg1 error:(id*)arg2 ;
 
 @end
+
+
+//ios 8
+
+@interface ABModel : NSObject
+- (ABRecordRef)displayedMemberAtIndex:(NSInteger)index;
+- (ABAddressBookRef)addressBook;
+@end
+
+@interface ABMembersDataSource : NSObject <UITableViewDataSource, UIActionSheetDelegate>
+- (ABModel *)model;
+- (void)deleteContact;
+@end
+
+@interface ABMembersController : NSObject
+@property (nonatomic,readonly) UITableView * currentTableView; 
+- (UITableView *)tableView;
+@end
+
+@interface ABMembersViewController : UIViewController
+- (id)initWithModel:(ABModel *)model;
+- (ABMembersController *)membersController;
+- (void)personWasDeleted;
+- (void)updateEditButton;
+-(id)tableView;
+
+@end
+
+@interface ABMemberCell : UITableViewCell
+- (void)setNamePieces:(NSArray *)pieces;
+
+- (NSArray *)namePieces;
+- (NSString *)namePieceForIndex:(NSUInteger)index;
+- (void)setNamePiece:(NSUInteger)index toName:(NSString *)name;
+- (void)adaptToEditing;
+@end
+
 
 

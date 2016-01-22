@@ -93,6 +93,22 @@
 			<string>StopAlarm iOS8 </string>
 		</dict>
 		<dict>
+			<key>action</key>
+			<string>NoBanner</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>NoBanner</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>kidsec</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>KidSecure</string>
+		</dict>
+		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>footerText</key>

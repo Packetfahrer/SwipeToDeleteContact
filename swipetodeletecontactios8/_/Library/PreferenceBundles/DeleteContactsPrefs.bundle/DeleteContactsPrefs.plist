@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>entry</key>
+	<dict>
+		<key>cell</key>
+		<string>PSLinkCell</string>
+		<key>icon</key>
+		<string>DeleteContactsPrefs.png</string>
+		<key>label</key>
+		<string>Delete Contact</string>
+	</dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Settings</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.packetfahrer.deldeleteContactChanged</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.packetfahrer.deldeleteContactPrefs</string>
+			<key>key</key>
+			<string>DCEnabled</string>
+			<key>label</key>
+			<string>Enabled</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.packetfahrer.deldeleteContactChanged</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>cellClass</key>
+			<string>DCSwitchTableCell</string>
+			<key>default</key>
+			<string>NO</string>
+			<key>defaults</key>
+			<string>com.packetfahrer.deldeleteContactPrefs</string>
+			<key>key</key>
+			<string>DCAlertView</string>
+			<key>label</key>
+			<string>Confirm</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>donation</string>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
+			<key>icon</key>
+			<string>paypal.png</string>
+			<key>id</key>
+			<string>dC_Donation</string>
+			<key>label</key>
+			<string>Donation</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>twitter</string>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
+			<key>icon</key>
+			<string>twitter.png</string>
+			<key>id</key>
+			<string>dC_Twitter</string>
+			<key>label</key>
+			<string>Find me on Twitter</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Other Tweaks by Me:</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>startSound</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>StartSound</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>appslide</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>Appslide</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>stopalarm8</string>
+			<key>cell</key>
+			<string>PSLinkCell</string>
+			<key>label</key>
+			<string>StopAlarm iOS8 </string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Developed by Packetfahrer © 2014                 Idea by: Sandra Güttel  Icon by: Tobias Ott </string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Delete Contacts</string>
+</dict>
+</plist>

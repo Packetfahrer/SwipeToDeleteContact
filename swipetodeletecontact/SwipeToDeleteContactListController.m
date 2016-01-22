@@ -43,7 +43,6 @@
 
 
 -(void)dimMe
-
 {
 
 
@@ -52,7 +51,6 @@
 }
 
 -(void)noMore
-
 {
 
 
@@ -64,6 +62,21 @@
 
 
 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"cydia://package/org.thebigboss.stopalarmios8"]]; //; cydia://package/
+
+}
+-(void)NoBanner
+{
+
+
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"cydia://package/org.thebigboss.nobanner"]]; //; cydia://package/
+
+}
+
+-(void)kidsec
+{
+
+
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"cydia://package/org.thebigboss.kidsecure"]]; //; cydia://package/
 
 }
 @end

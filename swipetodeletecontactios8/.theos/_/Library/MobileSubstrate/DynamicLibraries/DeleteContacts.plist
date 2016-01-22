@@ -1,0 +1,11 @@
+{
+    Filter =     {
+        Bundles =         (
+            "com.apple.AddressBookUI",
+            "com.apple.mobilephone",
+            "com.apple.MobileAddressBook"
+        );
+    };
+}
+
+
