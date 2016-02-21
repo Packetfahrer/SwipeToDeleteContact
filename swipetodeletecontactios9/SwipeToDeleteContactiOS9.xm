@@ -72,7 +72,7 @@ void loadPreferences() {
 		NSArray *keyList = [(NSArray *)CFPreferencesCopyKeyList((CFStringRef)APPID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost) autorelease];
 		preferences = (NSDictionary *)CFPreferencesCopyMultiple((CFArrayRef)keyList, (CFStringRef)APPID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 
-		NSLog (@"loadPreferences %@", preferences);
+		Log (@"loadPreferences %@", preferences);
 	}
 
 
@@ -82,6 +82,21 @@ void loadPreferences() {
 
 
 %hook CNContactListViewController //THIS IS A SUBCLASS OF A UITABLEVIEWCONTROLLER
+
+
+- (id)initWithDataSource:(id)arg1 searchable:(BOOL)arg2
+{
+
+
+	
+
+	dataSource = arg1;
+
+
+	return %orig();
+
+
+}
 
 -(id)initWithDataSource:(id)arg1
 {
@@ -102,7 +117,7 @@ void loadPreferences() {
 	if (Enabled) {
 
 	
-		NSLog (@"Enabled %i", Enabled);
+		
 
 
 	if ([[[self tableView] _rowData] globalRowForRowAtIndexPath:indexPath] == 0  && [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.mobilephone"]) {
