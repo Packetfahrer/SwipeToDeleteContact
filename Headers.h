@@ -35,6 +35,11 @@
 
 
 -(id)initWithDataSource:(id)arg1 ;
+
+- (id)_contactAtIndexPath:(id)arg1;
+
+- (void)deleteAllContacts;
+- (void)deleteAllContactsNow;
 - (void)deleteContact;
 
 @end
@@ -85,8 +90,11 @@
 
 @end
 
-@interface CNContactStore : NSObject
 
+ #import <Contacts/Contacts.h>  
+ #import <ContactsUI/ContactsUI.h>  
+
+@interface CNContactStore (SwipeToDeleteContact)
 
 
 -(BOOL)executeSaveRequest:(id)arg1 error:(id*)arg2 ;

@@ -33,10 +33,28 @@
 			<true/>
 			<key>defaults</key>
 			<string>com.packetfahrer.swipetodeletecontact</string>
+			<key>id</key>
+			<string>useAlarm</string>
 			<key>key</key>
 			<string>useAlarm</string>
 			<key>label</key>
 			<string>Confirm</string>
+		</dict>
+		<dict>
+			<key>PostNotification</key>
+			<string>com.packetfahrer.SwipeChanged</string>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.packetfahrer.swipetodeletecontact</string>
+			<key>id</key>
+			<string>useAll</string>
+			<key>key</key>
+			<string>useAll</string>
+			<key>label</key>
+			<string>Delete All</string>
 		</dict>
 		<dict>
 			<key>action</key>

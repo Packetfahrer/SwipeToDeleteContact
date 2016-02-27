@@ -6,6 +6,8 @@
 	<string>Swipe to Delete!</string>
 	<key>Really delete this Contact?</key>
 	<string>diesen Kontakt wirklich Löschen?</string>
+	<key>Really delete all Contacts?</key>
+	<string>wirklich alle Kontakte Löschen?</string>
 	<key>Cancel</key>
 	<string>Abbruch</string>
 	<key>Yes</key>

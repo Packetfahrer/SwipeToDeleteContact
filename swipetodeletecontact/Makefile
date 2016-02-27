@@ -16,7 +16,7 @@ BUNDLE_NAME = SwipeToDeleteContact
 SwipeToDeleteContact_CFLAGS = -fno-objc-arc
 SwipeToDeleteContact_FILES = SwipeToDeleteContactListController.m
 SwipeToDeleteContact_INSTALL_PATH = /Library/PreferenceBundles
-SwipeToDeleteContact_FRAMEWORKS = Foundation UIKit
+SwipeToDeleteContact_FRAMEWORKS = Foundation UIKit Social 
 SwipeToDeleteContact_PRIVATE_FRAMEWORKS = Preferences
 
 include $(THEOS_MAKE_PATH)/bundle.mk

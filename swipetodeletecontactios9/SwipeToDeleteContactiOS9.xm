@@ -25,33 +25,29 @@
 #define DEFAULT_USEALARM YES
 #define PREFS_USEALARM_KEY @"useAlarm"
 
+
+#define DEFAULT_USEALL NO
+#define PREFS_USEALL_KEY @"useAll"
+
 #define useAlarm ([preferences objectForKey: PREFS_USEALARM_KEY] ? [[preferences objectForKey: PREFS_USEALARM_KEY] boolValue] : DEFAULT_USEALARM)
+#define useAlL ([preferences objectForKey: PREFS_USEALL_KEY] ? [[preferences objectForKey: PREFS_USEALL_KEY] boolValue] : DEFAULT_USEALL)
 
 
 #define LocalizationsDirectory @"/Library/Application Support/SwipeToDeleteContact/Localizations"
 #define LOCALIZED_TITEL  [[NSBundle bundleWithPath:LocalizationsDirectory]localizedStringForKey:@"Swipe to Delete!" value:@"Swipe to Delete!" table:nil]
+
 #define LOCALIZED_MESSAGE [[NSBundle bundleWithPath:LocalizationsDirectory]localizedStringForKey:@"Really delete this Contact?" value:@"Really delete this Contact?" table:nil]
+#define LOCALIZED_MESSAGE_ALL [[NSBundle bundleWithPath:LocalizationsDirectory]localizedStringForKey:@"Really delete all Contacts?" value:@"Really delete all Contacts?" table:nil]
+
+
 #define LOCALIZED_CANCEL [[NSBundle bundleWithPath:LocalizationsDirectory]localizedStringForKey:@"Cancel" value:@"Cancel" table:nil]
 #define LOCALIZED_YES [[NSBundle bundleWithPath:LocalizationsDirectory]localizedStringForKey:@"Yes" value:@"Yes" table:nil]
 
 
-//  THESE HEADERS MIGHT BE THE KEY TO DELETION
-/*
-
-#import "ContactsUI/CNContactListTableViewCell.h"
-#import "ContactsUI/CNContactDeleteContactAction.h"
-#import "Contacts/CNContact.h"
-#import "Contacts/CNMutableContact.h"
-#import "Contacts/CNSaveRequest.h"
-#import "ContactsUI/CNContactDataSource.h"
-*/
 
 
-static NSInteger globalRow = -1;
-static CNContactStoreDataSource *dataSource;
-static CNContactStore *store;
 
-// static BOOL useAlarm = YES; //Like Confirm 
+static CNMutableContact *contact;
 
 static NSDictionary *preferences = nil;
 
@@ -84,29 +80,39 @@ void loadPreferences() {
 %hook CNContactListViewController //THIS IS A SUBCLASS OF A UITABLEVIEWCONTROLLER
 
 
-- (id)initWithDataSource:(id)arg1 searchable:(BOOL)arg2
+- (void)viewDidLoad
 {
 
+	if (useAlL) {
+
+	UIBarButtonItem  *deletaAllButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteAllContact)]; 
+  
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:self.navigationItem.rightBarButtonItem,deletaAllButton,nil];
+
+
+	}
 
 	
+    %orig;
 
-	dataSource = arg1;
 
-
-	return %orig();
 
 
 }
 
--(id)initWithDataSource:(id)arg1
-{
-	
-	//loadPreferences();
-
-	dataSource = arg1;
+- (void)viewWillAppear:(BOOL)arg1{
 	
 
-	return %orig;
+	if (useAlL) {
+
+	UIBarButtonItem  *deletaAllButton= [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteAllContact)]; 
+  
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:self.navigationItem.rightBarButtonItem,deletaAllButton,nil];
+
+
+	}
+
+    %orig;
 
 }
 
@@ -116,20 +122,10 @@ void loadPreferences() {
 
 	if (Enabled) {
 
-	
-		
 
-
-	if ([[[self tableView] _rowData] globalRowForRowAtIndexPath:indexPath] == 0  && [[[NSBundle mainBundle] bundleIdentifier] isEqualToString:@"com.apple.mobilephone"]) {
+		return YES;
 
 	
-		return NO; 
-
-	}
-
-
-	return YES;
-
 	} else {
 
 	return NO;
@@ -148,10 +144,12 @@ void loadPreferences() {
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
     	  
-    	globalRow = [[tableView _rowData] globalRowForRowAtIndexPath:indexPath];
+    	
+    	contact = [[self _contactAtIndexPath:indexPath] mutableCopy];
+    	
 
-    	
-    	
+    	Log(@"CNMutableContact  %@", contact);
+
     	if (useAlarm) {
 
 
@@ -200,6 +198,26 @@ void loadPreferences() {
 		}
 
 
+		if ([alertView tag] == 0076) {
+		
+			if (buttonIndex == 1) {
+
+			[self deleteAllContactsNow];
+		
+			} else {
+
+
+				Log (@"cancel");
+
+				return;
+				
+
+			}
+
+		
+		}
+
+
 	
 }
 
@@ -209,32 +227,150 @@ void loadPreferences() {
 
 		
 
-		store = [dataSource store];
+			CNContactStore *contactStore = [[CNContactStore alloc] init];
 
-    	CNSaveRequest *saveRequest = [[CNSaveRequest alloc] init];
+			CNSaveRequest *saveRequest = [[CNSaveRequest alloc] init];
 
-    	
-    	CNMutableContact *updatedContact = [[dataSource.contacts objectAtIndex:globalRow] mutableCopy];
+				
+			[saveRequest deleteContact:contact];
 
-    	CNContact *c = [dataSource.contacts objectAtIndex:globalRow];
-    	
-
-    	[updatedContact setSnapshot:c];
+			[contactStore executeSaveRequest:saveRequest error:nil];
 
 
-		[saveRequest deleteContact:updatedContact];
+			self.tableView.editing = NO;
 
 
-		[store executeSaveRequest:saveRequest  error:nil] ;
-		
-		self.tableView.editing = NO;
+			[self.tableView reloadData];
+
+			contact = nil;
+
+			[contact release];
 
 	
 }
 
+
+%new(v@:)
+
+
+- (void)deleteAllContact {
+
+
+
+	if (useAlarm) {
+
+
+   		UIAlertView *x = [[UIAlertView alloc] initWithTitle:LOCALIZED_TITEL
+					    message:LOCALIZED_MESSAGE_ALL
+					    delegate:self
+				  		cancelButtonTitle:LOCALIZED_CANCEL
+				  		otherButtonTitles:LOCALIZED_YES, nil];
+   						[x setTag:0076];
+						[x show];
+
+
+					
+					return;
+		
+    	}
+
+    	[self deleteAllContactsNow];
+
+    
+
+
+			
+
+}
+
+
+%new(v@:)
+
+
+- (void)deleteAllContactsNow {
+
+
+			dispatch_async(dispatch_get_main_queue(), ^{
+
+
+			CNContactStore *contactStore = [[CNContactStore alloc] init];
+
+			
+
+			[contactStore requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
+
+
+			NSArray *keys = @[CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey, CNContactImageDataKey];
+       
+
+			NSString *containerId = contactStore.defaultContainerIdentifier;
+			NSPredicate *predicate = [CNContact predicateForContactsInContainerWithIdentifier:containerId];
+		
+			NSArray *cnContacts = [contactStore unifiedContactsMatchingPredicate:predicate keysToFetch:keys error:&error];
+
+			if (error) {
+			
+				Log(@"error fetching contacts %@", error);
+			
+			} else {
+
+
+
+				
+
+					CNSaveRequest *saveRequest = [[CNSaveRequest alloc] init];
+
+					for (CNContact *contact in cnContacts) {
+
+					[saveRequest deleteContact:[contact mutableCopy]];
+				
+					}
+
+					[contactStore executeSaveRequest:saveRequest error:nil];
+				
+				 
+
+					}
+
+			
+
+
+				}];
+
+
+				self.tableView.editing = NO;
+
+
+				[self.tableView reloadData];
+
+			});
+
+}
+
+
 %end
 
 %end
+
+
+#import <spawn.h>
+
+
+static void PreferencesChangedCallback(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo)
+{
+	
+	pid_t pid;
+    int status;
+    const char* args[] = { "killall", "-9", "Contacts", NULL };
+    posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
+    waitpid(pid, &status, WEXITED);
+	
+
+	
+	loadPreferences();
+
+
+}
 
 
 %ctor {
@@ -246,12 +382,22 @@ void loadPreferences() {
 		loadPreferences();
 
     	
+    	/*
 		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(),
 											NULL,
 											(CFNotificationCallback)loadPreferences,
 											CFSTR("com.packetfahrer.SwipeChanged"),
 											NULL,
 											CFNotificationSuspensionBehaviorDeliverImmediately);
+		*/
+
+		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), 
+											NULL, PreferencesChangedCallback, 
+											CFSTR("com.packetfahrer.SwipeChanged"), 
+											NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+
+
+
 	}
 
 }
